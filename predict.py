@@ -44,12 +44,18 @@ def danger(my_boat, enemy_boat, buoy_list):
 
   dist = r*theta/math.sin(theta)
 
+  # danger near enemy boat
   danger = math.exp(-dist**2/100000) + \
            math.exp(-R/20000)
 
+  # danger near buoy
   for b in buoy_list:
     danger += math.tanh(math.exp((-(my_boat.position[0]-b.position[0])**2 - (my_boat.position[1]-b.position[1])**2)/2000))
 
+  # danger near pool edge
+  pc = (516, 516)
+  1200
+  return danger
   
 
 if __name__ == "__main__":
