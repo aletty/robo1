@@ -19,7 +19,7 @@ def look_ahead(boat, rudder, thrust, dt = 100):
 
   else:
     #calculate change in heading
-    rad = 1/(rudder*.1)#TODO figure out what this number really is
+    rad = 1/(abs(rudder)*-6.91e-4)#TODO figure out what this number really is
     theta = arc_len/rad
     #calculate change in position
     dl = 2*rad*math.sin(theta/2)
@@ -31,11 +31,26 @@ def look_ahead(boat, rudder, thrust, dt = 100):
   new_heading = theta + boat.heading
   new_position = boat.position[0] + dx, boat.position[1] + dy
 
-def danger(my_boat, enemy_boat, buoy_list):
-  pass
-
-
   return new_heading, new_position
+
+def danger(my_boat, enemy_boat, buoy_list):
+  x = my_boat.position[0] - enemy_boat.position[0]
+  y = my_boat.position[1] - enemy_boat.position[1]
+  
+  r = math.sqrt(x**2 + y**2)
+  theta = math.atan(y/x) - math.pi/2
+  if x < 0
+    theta += math.pi
+
+  dist = r*theta/math.sin(theta)
+
+  danger = math.exp(-dist**2/100000) + \
+           math.exp(-R/20000)
+
+  for b in buoy_list:
+    danger += math.tanh(math.exp((-(my_boat.position[0]-b.position[0])**2 - (my_boat.position[1]-b.position[1])**2)/2000))
+
+  
 
 if __name__ == "__main__":
   myBoat = Boat('beth', 'L')
