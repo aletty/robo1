@@ -1,0 +1,15 @@
+Index	Name			String	NXT Val	FB Val
+
+0	Start Character		[	26	91
+1	IR Servo		A-O	0-14	65-79
+2	Rudder			A-O	0-14	65-79
+3	Prop			A-O	0-14	65-79
+4	Beh 1			A-F	0-5	65-70
+5	Beh 2			A-F	0-5	65-70
+6 	Beh 3			A-F	0-5	65-70
+7	Beh 4			A-F	0-5	65-70
+8	Beh 5			A-F	0-5	65-70
+9	Beh 6			A-F	0-5	65-70
+10	End Character		]	28	93
+	Soft Stop		\	27	92
+	E-Stop			^	29	94
