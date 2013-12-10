@@ -5,7 +5,7 @@ def setup_xbee(port = '/dev/ttyUSB0'):
   ser = serial.Serial(port)
   return ser
 
-def send_nxt(ser, thrust, rudder, left_wall_follow = False, right_wall_follow = False, gtfo_wall = False):
+def send_nxt(ser, rudder, thrust, left_wall_follow = False, right_wall_follow = False, gtfo_wall = False):
   # set behavior weights
   forebrain_weight = 1
   right_wall_follow_weight = 0

@@ -1,4 +1,5 @@
 from datetime import datetime
+import predict
 import time
 import math
 
@@ -19,6 +20,7 @@ class Boat(object):
     self.speed = 0
     self.last_updated = datetime.now()
     self.angleMap = angleDict[self.greek]
+    self.action = 7, 7
 
   def update(self, pos, heading):
     #calculate dt
@@ -26,10 +28,13 @@ class Boat(object):
     dt = (now - self.last_updated).total_seconds()
     
     # update variables
-    self.last_updated = now
-    self.speed = .3*self.speed + .7*math.sqrt((self.position[0] - pos[0])**2 + (self.position[1] - pos[1])**2)/dt
-    self.position = pos
-    self.heading = heading
+    if pos != (-1,-1):
+      self.last_updated = now
+      self.speed = .3*self.speed + .7*math.sqrt((self.position[0] - pos[0])**2 + (self.position[1] - pos[1])**2)/dt
+      self.position = pos
+      self.heading = heading
+    else:
+      self.heading, self.position = predict.look_ahead(self, self.action[0], self.action[1], dt)
 
   def __str__(self):
     return '{"name": "%s", "position": "%s", "heading": "%s", "speed": "%s"}' % (self.name, self.position, self.heading, self.speed)
