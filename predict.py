@@ -24,14 +24,14 @@ def look_ahead(boat, rudder, thrust, dt = .1):
 
   else:
     #calculate change in heading
-    rad = 1/(abs(rudder)*-6.91e-4)#TODO figure out what this number really is
+    rad = 1/(abs(rudder)*6.91e-4)
     theta = arc_len/rad
     #calculate change in position
     dl = 2*rad*math.sin(theta/2)
 
 
-  dx = -dl*math.cos(boat.heading - theta/2)
-  dy = dl*math.sin(boat.heading - theta/2)
+  dx = -dl*math.cos(boat.heading - math.copysign(1,rudder)*theta/2)
+  dy = dl*math.sin(boat.heading - math.copysign(1,rudder)*theta/2)
   # dy = math.cos(boat.heading - theta/2)
   # dx_temp = dl*math.sin(math.pi/2 - theta)
   # dy_temp = -dl*math.cos(math.pi/2 - theta)
@@ -115,8 +115,8 @@ if __name__ == "__main__":
   myBoat = Boat('beth', 'L')
   myBoat.speed = 15
   myBoat.position = (300.5,300.5)
-  myBoat.heading = math.pi
-  print look_ahead(myBoat,.09,1)
+  myBoat.heading = 3*math.pi/2
+  print look_ahead(myBoat,.1,1)
 
   # buoys = []
   # for i,pos in enumerate([(229, 295), (220, 778), (629, 860), (827, 405)]):
