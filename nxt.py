@@ -1,4 +1,5 @@
 import serial
+import time
 
 def setup_xbee(port = '/dev/ttyUSB0'):
   ser = serial.Serial(port)
@@ -48,4 +49,9 @@ def send_nxt(ser, thrust, rudder, left_wall_follow = False, right_wall_follow = 
 
 if __name__ == '__main__':
   ser = setup_xbee()
-  print send_nxt(ser, 3, 7)
+  send_nxt(ser, 0, 0)
+  time.sleep(2)
+  send_nxt(ser ,14, 14)
+  time.sleep(7)
+  send_nxt(ser, 7, 7)
+  ser.close()
