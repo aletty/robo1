@@ -66,38 +66,43 @@ def np_danger(my_boat_pos, enemy_boat_pos, buoy_list):
   pool_danger = (np.tanh(pool_danger)+1)/2
   
   # danger near the cloud
-  # danger += 1-np.tanh((x-200)/50)
-  return np.maximum(np.maximum(1.3*enemy_danger, .8*buoy_danger), pool_danger)
+  cloud_danger = (1-np.tanh((my_boat_pos[0]-200)/50))/2
 
-# def danger(my_boat_pos, enemy_boat_pos, buoy_list):
-#   # position relative to enemy boat
-#   x = my_boat_pos[0] - enemy_boat_pos[0]
-#   y = my_boat_pos[1] - enemy_boat_pos[1]
-#   r = math.sqrt(x**2 + y**2)
-#   theta = math.atan(y/x) - math.pi/2 + (x < 0)*math.pi
-#   dist = r*theta/math.sin(theta)
-#   # danger near enemy boat
-#   danger = math.exp(-dist**2/100000) + \
-#            math.exp(-math.sqrt(x**2 + y**2)/20000)
+  # find the real danger
+  return np.maximum(np.maximum(1.3*enemy_danger, .8*buoy_danger), np.maximum(pool_danger, cloud_danger))
 
+def danger(my_boat_pos, enemy_boat_pos, buoy_list):
+# position relative to enemy boat
+  x = my_boat_pos[0] - enemy_boat_pos[0]
+  y = my_boat_pos[1] - enemy_boat_pos[1]
+  r = math.sqrt(x**2 + y**2)
+  theta = math.atan(y/x) - math.pi/2 + (x < 0)*math.pi
+  dist = r*theta/math.sin(theta)
 
-#   ## static dangers
-#   staticDanger = 0
-#   # danger near buoy
-#   for b in buoy_list:
-#     x, y = my_boat_pos[0]-b.position[0], my_boat_pos[1]-b.position[1]
-#     staticDanger += math.tanh(10*math.exp(-(x**2 + y**2)/1500))
+  # danger near enemy boat
+  enemy_danger = 0
+  print math.exp(-dist**2/100000)
+  enemy_danger = .5*math.exp(-dist**2/100000) + \
+           .5*math.exp(-(x**2 + y**2)/20000)
 
-#   # danger near pool edge
-#   pc = (645, 518)
-#   x, y = my_boat_pos[0]-pc[0], my_boat_pos[1]-pc[1]
-#   distToEdge = math.sqrt(x**2 + y**2) - 530
-#   staticDanger += math.exp(-distToEdge**2/1000)
+  # danger near buoy
+  buoy_danger = 0
+  for b in buoy_list:
+    x, y = my_boat_pos[0]-b.position[0], my_boat_pos[1]-b.position[1]
+    buoy_danger += math.tanh(10*math.exp(-(x**2 + y**2)/1500))
 
-#   # danger near the cloud
-#   staticDanger += 1-math.tanh((x-200)/50)
+  # danger near pool edge
+  pc = (492, 525)
+  x, y = my_boat_pos[0]-pc[0], my_boat_pos[1]-pc[1]
+  distToEdge = math.sqrt(x**2 + y**2) - 530
+  pool_danger = (distToEdge)/30 # math.exp(-distToEdge**2/1000)
+  pool_danger = (math.tanh(pool_danger)+1)/2
 
-#   return max(4*danger, staticDanger)
+  # danger near the cloud
+  cloud_danger = (1-np.tanh((my_boat_pos[0]-200)/50))/2
+
+  # find the real danger
+  return max(1.3*enemy_danger, .8*buoy_danger, pool_danger, cloud_danger)
 
 
 if __name__ == "__main__":
@@ -113,7 +118,7 @@ if __name__ == "__main__":
     b.position = pos
     buoys.append(b)
 
-  print np_danger((100,100),(300,300),buoys)
+  print danger((100,100),(300,300),buoys)
   fig = plt.figure()
   ax = fig.gca(projection='3d')
   # X = np.arange(0, 1032, 10)
