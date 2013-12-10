@@ -73,12 +73,17 @@ if __name__ == "__main__":
   myBoat.heading = 0
   print look_ahead(myBoat,.1,1)
 
+  buoys = []
+  for pos in [(825, 415), (637, 850), (230,774), (232, 293)]:
+    b = Buoy("%s" % i)
+    b.position = pos
+
   fig = plt.figure()
   ax = fig.gca(projection='3d')
   X = np.arange(0, 1500, 10)
   Y = np.arange(0, 1500, 10)
   X, Y = np.meshgrid(X, Y)
-  R = danger((X, Y), (300.5, 300.5),[])
+  R = danger((X, Y), (300.5, 300.5),buoys)
   surf = ax.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.coolwarm,
           linewidth=0, antialiased=False)
   ax.set_zlim(-1.01, 1.01)
