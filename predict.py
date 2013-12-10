@@ -61,9 +61,8 @@ def danger(my_boat_pos, enemy_boat_pos, buoy_list):
     danger += np.tanh(np.exp((-(my_boat_pos[0]-b.position[0])**2 - (my_boat_pos[1]-b.position[1])**2)/800))
 
   # danger near pool edge
-  danger += np.exp(-np.sqrt(my_boat_pos[0]**2 + my_boat_pos[1]**2)/1000)
   pc = (680, 516)
-  1200
+  danger += np.exp(-np.sqrt((my_boat_pos[0]-pc[0])**2 + (my_boat_pos[1]-pc[1])**2 - 600)**2/1000)
   return danger
   
 
