@@ -2,6 +2,9 @@ from datetime import datetime
 import time
 import math
 
+G_map = [0.7853981633974483, 0.6981317007977318, 0.5585053606381855, 0.4363323129985824, 0.33161255787892263, 0.17453292519943295, 0.05235987755982989, -0.06981317007977318, -0.22689280275926285, -0.3839724354387525, -0.5061454830783556, -0.6283185307179586, -0.7330382858376184, -0.7853981633974483, -0.7853981633974483]
+angleDict = {"G":G_map}
+
 class Boat(object):
   def __init__(self, name, greek):
     self.name = name
@@ -10,6 +13,7 @@ class Boat(object):
     self.heading = 0
     self.speed = 0
     self.last_updated = datetime.now()
+    self.angleMap = angleDict[self.greek]
 
   def update(self, pos, heading):
     #calculate dt

@@ -1,10 +1,10 @@
 from models import *
 import math
-import matplotlib.pyplot as plt
-import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
+# import matplotlib.pyplot as plt
+# import numpy as np
+# from mpl_toolkits.mplot3d import Axes3D
+# from matplotlib import cm
+# from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
 # predicts the boat's future state given it's current state
 #   boat:   a boat object
@@ -13,7 +13,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 #   dt:     time to simulate in milliseconds
 def look_ahead(boat, rudder, thrust, dt = 100):
   # calculate the circle
-  arc_len = boat.speed*dt
+  arc_len = boat.speed*dt*math.copysign(1, thrust-7)
   
   # catch the case that the rudder angle is really small
   if abs(rudder < .1):
@@ -38,34 +38,59 @@ def look_ahead(boat, rudder, thrust, dt = 100):
 
   return new_heading, new_position
 
+# def npDanger(my_boat_pos, enemy_boat_pos, buoy_list):
+#   x = my_boat_pos[0] - enemy_boat_pos[0]
+#   y = my_boat_pos[1] - enemy_boat_pos[1]
+  
+#   print x
+#   print type(x)
+  
+#   r = np.sqrt(x**2 + y**2)
+#   theta = np.arctan(y/x) - np.pi/2 + (x < 0)*np.pi
+#   #if (x < 0):
+#   #  theta += np.pi
+
+#   dist = r*theta/np.sin(theta)
+
+#   # danger near enemy boat
+#   danger = np.exp(-dist**2/100000) + \
+#            np.exp(-np.sqrt(x**2+y**2)/20000)
+
+#   # danger near buoy
+#   print len(buoy_list)
+#   for b in buoy_list:
+#     danger += np.tanh(10*np.exp(-((my_boat_pos[0]-b.position[0])**2 + (my_boat_pos[1]-b.position[1])**2)/800))
+
+#   # danger near pool edge
+#   pc = (680, 516)
+#   danger += np.exp(-(np.sqrt((my_boat_pos[0]-pc[0])**2 + (my_boat_pos[1]-pc[1])**2) - 600)**2/1000)
+#   return danger
+
 def danger(my_boat_pos, enemy_boat_pos, buoy_list):
   x = my_boat_pos[0] - enemy_boat_pos[0]
   y = my_boat_pos[1] - enemy_boat_pos[1]
   
-  print x
-  print type(x)
-  
-  r = np.sqrt(x**2 + y**2)
-  theta = np.arctan(y/x) - np.pi/2 + (x < 0)*np.pi
+  r = math.sqrt(x**2 + y**2)
+  theta = math.atan(y/x) - math.pi/2 + (x < 0)*math.pi
   #if (x < 0):
-  #  theta += np.pi
+  #  theta += math.pi
 
-  dist = r*theta/np.sin(theta)
+  dist = r*theta/math.sin(theta)
 
   # danger near enemy boat
-  danger = np.exp(-dist**2/100000) + \
-           np.exp(-np.sqrt(x**2+y**2)/20000)
+  danger = math.exp(-dist**2/100000) + \
+           math.exp(-math.sqrt(x**2+y**2)/20000)
 
   # danger near buoy
-  print len(buoy_list)
+  # print len(buoy_list)
   for b in buoy_list:
-    danger += np.tanh(10*np.exp(-((my_boat_pos[0]-b.position[0])**2 + (my_boat_pos[1]-b.position[1])**2)/800))
+    danger += math.tanh(10*math.exp(-((my_boat_pos[0]-b.position[0])**2 + (my_boat_pos[1]-b.position[1])**2)/800))
 
   # danger near pool edge
   pc = (680, 516)
-  danger += np.exp(-(np.sqrt((my_boat_pos[0]-pc[0])**2 + (my_boat_pos[1]-pc[1])**2) - 600)**2/1000)
+  danger += math.exp(-(math.sqrt((my_boat_pos[0]-pc[0])**2 + (my_boat_pos[1]-pc[1])**2) - 600)**2/1000)
   return danger
-  
+
 
 if __name__ == "__main__":
   myBoat = Boat('beth', 'L')
@@ -80,16 +105,17 @@ if __name__ == "__main__":
     b.position = pos
     buoys.append(b)
 
-  fig = plt.figure()
-  ax = fig.gca(projection='3d')
-  X = np.arange(0, 1500, 10)
-  Y = np.arange(0, 1500, 10)
-  X, Y = np.meshgrid(X, Y)
-  R = danger((X, Y), (680+.1, 516+.1),buoys)
-  surf = ax.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.coolwarm,
-          linewidth=0, antialiased=False)
-  ax.set_zlim(-1.01, 1.01)
-  plt.show()
+  print danger((100,100),(300,300),buoys)
+  # fig = plt.figure()
+  # ax = fig.gca(projection='3d')
+  # X = np.arange(0, 1500, 10)
+  # Y = np.arange(0, 1500, 10)
+  # X, Y = np.meshgrid(X, Y)
+  # R = npDanger((X, Y), (680+.1, 516+.1),buoys)
+  # surf = ax.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.coolwarm,
+  #         linewidth=0, antialiased=False)
+  # ax.set_zlim(-1.01, 1.01)
+  # plt.show()
 
 
 
