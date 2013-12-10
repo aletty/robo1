@@ -11,15 +11,15 @@ def decide(my_boat,enemy_boat,buoy_list):
 		dangers.append(danger(pos, enemy_boat.position, buoy_list)) 
 	
 	print dangers
-	maxIndex = max(xrange(len(dangers)),key=dangers.__getitem__)
-	rudder, thrust = actions[maxIndex]
+	minIndex = min(xrange(len(dangers)),key=dangers.__getitem__)
+	rudder, thrust = actions[minIndex]
 	return rudder, thrust
 
 if __name__ == "__main__":
 	boatB = Boat("Beth","G")
 	boatD = Boat("Deborah","G")
 	time.sleep(7)
-	boatB.update((000,600),1)
+	boatB.update((41,1173),1)
 	boatD.update((500,500),1.1)
 	print boatB.speed
 	print boatD.speed
