@@ -43,7 +43,7 @@ def danger(my_boat_pos, enemy_boat_pos, buoy_list):
   
   r = math.sqrt(x**2 + y**2)
   theta = math.atan(y/x) - math.pi/2
-  if x < 0
+  if (x < 0):
     theta += math.pi
 
   dist = r*theta/math.sin(theta)
@@ -68,8 +68,7 @@ if __name__ == "__main__":
   myBoat.speed = .4
   myBoat.position = (300,300)
   myBoat.heading = 0
-  print look_ahead(myBoat,.1
-  myBoat.heading,1)
+  print look_ahead(myBoat,.1,1)
 
   fig = plt.figure()
   ax = fig.gca(projection='3d')
