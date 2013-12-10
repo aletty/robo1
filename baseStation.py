@@ -3,10 +3,10 @@ from models import *
 import math
 
 def setup_udp_socket(base_ip, base_port):
-  UDP_IP = base_ip
+  UDP_IP = str(base_ip)
   UDP_PORT = base_port
 
-  sock = socket.socket(socke.AF_INET, socket.SOCK_DGRAM)
+  sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
   sock.bind((UDP_IP, UDP_PORT))
   return sock
 
@@ -32,9 +32,15 @@ def read_base_station(boat_1, boat_2, buoy_list, socket):
     buoy.position = (int(data_list[buoy_index+1]), int(data_list[buoy_index+2]))
 
 if __name__ == '__main__':
-  boat1 = Boat('deborah', 'G')
-  boat2 = Boat('beth', 'L')
+  boat1 = Boat('deborah', 'L')
+  boat2 = Boat('beth', 'P')
 
   buoy_list = [Buoy(name) for name in ['A', 'B', 'C', 'D']]
 
-  read_base_station(boat1, boat2, buoy_list, None)
+  socket = setup_udp_socket(0xFFFFFFFF, 61557)
+  read_base_station(boat1, boat2, buoy_list, socket)
+
+  print boat1
+  print boat2
+  for b in buoy_list:
+    print b
