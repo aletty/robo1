@@ -1,5 +1,7 @@
 from models import *
 import math
+import matplotlib.pyplot as plt
+import numpy as np
 
 # predicts the boat's future state given it's current state
 #   boat:   a boat object
@@ -33,9 +35,11 @@ def look_ahead(boat, rudder, thrust, dt = 100):
 
   return new_heading, new_position
 
-def danger(my_boat, enemy_boat, buoy_list):
-  x = my_boat.position[0] - enemy_boat.position[0]
-  y = my_boat.position[1] - enemy_boat.position[1]
+def danger(my_boat_pos, enemy_boat_pos, buoy_list):
+  print x
+  print type(x)
+  x = my_boat_pos[0] - enemy_boat_pos[0]
+  y = my_boat_pos[1] - enemy_boat_pos[1]
   
   r = math.sqrt(x**2 + y**2)
   theta = math.atan(y/x) - math.pi/2
@@ -50,10 +54,11 @@ def danger(my_boat, enemy_boat, buoy_list):
 
   # danger near buoy
   for b in buoy_list:
-    danger += math.tanh(math.exp((-(my_boat.position[0]-b.position[0])**2 - (my_boat.position[1]-b.position[1])**2)/2000))
+    danger += math.tanh(math.exp((-(my_boat_pos[0]-b.position[0])**2 - (my_boat_pos[1]-b.position[1])**2)/800))
 
   # danger near pool edge
-  pc = (516, 516)
+  danger += math.exp(-math.sqrt(my_boat_pos[0]**2 + my_boat_pos[1]**2)/1000)
+  pc = (680, 516)
   1200
   return danger
   
@@ -61,7 +66,20 @@ def danger(my_boat, enemy_boat, buoy_list):
 if __name__ == "__main__":
   myBoat = Boat('beth', 'L')
   myBoat.speed = .4
-  myBoat.position = (0,0)
+  myBoat.position = (300,300)
   myBoat.heading = 0
   print look_ahead(myBoat,.1
   myBoat.heading,1)
+
+  fig = plt.figure()
+  ax = fig.gca(projection='3d')
+  X = np.arange(0, 1000, 10)
+  Y = np.arange(0, 1000, 10)
+  X, Y = np.meshgrid(X, Y)
+  R = danger((X, Y), (300, 300),[])
+  surf = ax.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.coolwarm,
+          linewidth=0, antialiased=False)
+  ax.set_zlim(-1.01, 1.01)
+
+
+
