@@ -2,6 +2,9 @@ from models import *
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
 # predicts the boat's future state given it's current state
 #   boat:   a boat object
@@ -36,28 +39,29 @@ def look_ahead(boat, rudder, thrust, dt = 100):
   return new_heading, new_position
 
 def danger(my_boat_pos, enemy_boat_pos, buoy_list):
-  print x
-  print type(x)
   x = my_boat_pos[0] - enemy_boat_pos[0]
   y = my_boat_pos[1] - enemy_boat_pos[1]
   
-  r = math.sqrt(x**2 + y**2)
-  theta = math.atan(y/x) - math.pi/2
-  if (x < 0):
-    theta += math.pi
+  print x
+  print type(x)
+  
+  r = np.sqrt(x**2 + y**2)
+  theta = np.arctan(y/x) - np.pi/2 + (x < 0)*np.pi
+  #if (x < 0):
+  #  theta += np.pi
 
-  dist = r*theta/math.sin(theta)
+  dist = r*theta/np.sin(theta)
 
   # danger near enemy boat
-  danger = math.exp(-dist**2/100000) + \
-           math.exp(-R/20000)
+  danger = np.exp(-dist**2/100000) + \
+           np.exp(-np.sqrt(x**2+y**2)/20000)
 
   # danger near buoy
   for b in buoy_list:
-    danger += math.tanh(math.exp((-(my_boat_pos[0]-b.position[0])**2 - (my_boat_pos[1]-b.position[1])**2)/800))
+    danger += np.tanh(np.exp((-(my_boat_pos[0]-b.position[0])**2 - (my_boat_pos[1]-b.position[1])**2)/800))
 
   # danger near pool edge
-  danger += math.exp(-math.sqrt(my_boat_pos[0]**2 + my_boat_pos[1]**2)/1000)
+  danger += np.exp(-np.sqrt(my_boat_pos[0]**2 + my_boat_pos[1]**2)/1000)
   pc = (680, 516)
   1200
   return danger
@@ -66,19 +70,20 @@ def danger(my_boat_pos, enemy_boat_pos, buoy_list):
 if __name__ == "__main__":
   myBoat = Boat('beth', 'L')
   myBoat.speed = .4
-  myBoat.position = (300,300)
+  myBoat.position = (300.5,300.5)
   myBoat.heading = 0
   print look_ahead(myBoat,.1,1)
 
   fig = plt.figure()
   ax = fig.gca(projection='3d')
-  X = np.arange(0, 1000, 10)
-  Y = np.arange(0, 1000, 10)
+  X = np.arange(0, 1500, 10)
+  Y = np.arange(0, 1500, 10)
   X, Y = np.meshgrid(X, Y)
-  R = danger((X, Y), (300, 300),[])
+  R = danger((X, Y), (300.5, 300.5),[])
   surf = ax.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.coolwarm,
           linewidth=0, antialiased=False)
   ax.set_zlim(-1.01, 1.01)
+  plt.show()
 
 
 
