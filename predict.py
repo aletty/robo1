@@ -16,7 +16,7 @@ def look_ahead(boat, rudder, thrust, dt = .1):
   arc_len = boat.speed*dt*math.copysign(1, thrust-7)
   
   # catch the case that the rudder angle is really small
-  if abs(rudder < .1):
+  if abs(rudder) < .1:
     #calculate change in heading
     theta = 0
     #calculate change in position
@@ -102,7 +102,7 @@ def danger(my_boat_pos, enemy_boat_pos, buoy_list):
   cloud_danger = (1-np.tanh((my_boat_pos[0]-200)/50))/2
 
   # find the real danger
-  return max(1.3*enemy_danger, .8*buoy_danger, pool_danger, cloud_dangere 
+  return max(1.3*enemy_danger, .8*buoy_danger, pool_danger, cloud_danger) 
 
 
 if __name__ == "__main__":
@@ -112,25 +112,25 @@ if __name__ == "__main__":
   myBoat.heading = 0
   print look_ahead(myBoat,.1,1)
 
-  buoys = []
-  for i,pos in enumerate([(229, 295), (220, 778), (629, 860), (827, 405)]):
-    b = Buoy("%s" % i)
-    b.position = pos
-    buoys.append(b)
+  # buoys = []
+  # for i,pos in enumerate([(229, 295), (220, 778), (629, 860), (827, 405)]):
+  #   b = Buoy("%s" % i)
+  #   b.position = pos
+  #   buoys.append(b)
 
-  print danger((100,100),(300,300),buoys)
-  fig = plt.figure()
-  ax = fig.gca(projection='3d')
-  # X = np.arange(0, 1032, 10)
-  # Y = np.arange(0, 1032, 10)
-  X = np.arange(-100, 1132, 10)
-  Y = np.arange(-100, 1132, 10)
-  X, Y = np.meshgrid(X, Y)
-  R = np_danger((X, Y), (680+.1, 516+.1),buoys)
-  surf = ax.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.coolwarm,
-          linewidth=0, antialiased=False)
-  # ax.set_zlim(-1.01, 1.01)
-  plt.show()
+  # print danger((100,100),(300,300),buoys)
+  # fig = plt.figure()
+  # ax = fig.gca(projection='3d')
+  # # X = np.arange(0, 1032, 10)
+  # # Y = np.arange(0, 1032, 10)
+  # X = np.arange(-100, 1132, 10)
+  # Y = np.arange(-100, 1132, 10)
+  # X, Y = np.meshgrid(X, Y)
+  # R = np_danger((X, Y), (680+.1, 516+.1),buoys)
+  # surf = ax.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.coolwarm,
+  #         linewidth=0, antialiased=False)
+  # # ax.set_zlim(-1.01, 1.01)
+  # plt.show()
 
 
 
