@@ -57,8 +57,10 @@ def danger(my_boat_pos, enemy_boat_pos, buoy_list):
            np.exp(-np.sqrt(x**2+y**2)/20000)
 
   # danger near buoy
+  print len(buoy_list)
   for b in buoy_list:
-    danger += np.tanh(np.exp((-(my_boat_pos[0]-b.position[0])**2 - (my_boat_pos[1]-b.position[1])**2)/800))
+    print b
+    danger += np.tanh(10*np.exp(-((my_boat_pos[0]-b.position[0])**2 + (my_boat_pos[1]-b.position[1])**2)/800))
 
   # danger near pool edge
   pc = (680, 516)
@@ -74,16 +76,17 @@ if __name__ == "__main__":
   print look_ahead(myBoat,.1,1)
 
   buoys = []
-  for pos in [(825, 415), (637, 850), (230,774), (232, 293)]:
+  for i,pos in enumerate([(825, 415), (637, 850), (230,774), (232, 293)]):
     b = Buoy("%s" % i)
     b.position = pos
+    buoys.append(b)
 
   fig = plt.figure()
   ax = fig.gca(projection='3d')
   X = np.arange(0, 1500, 10)
   Y = np.arange(0, 1500, 10)
   X, Y = np.meshgrid(X, Y)
-  R = danger((X, Y), (300.5, 300.5),buoys)
+  R = danger((X, Y), (680+.1, 516+.1),buoys)
   surf = ax.plot_surface(X, Y, R, rstride=1, cstride=1, cmap=cm.coolwarm,
           linewidth=0, antialiased=False)
   ax.set_zlim(-1.01, 1.01)
