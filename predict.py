@@ -29,11 +29,17 @@ def look_ahead(boat, rudder, thrust, dt = .1):
     #calculate change in position
     dl = 2*rad*math.sin(theta/2)
 
-  dx = dl*math.sin(boat.heading + theta)
-  dy = dl*math.cos(boat.heading + theta)
+
+  dx = -dl*math.cos(boat.heading - theta/2)
+  dy = dl*math.sin(boat.heading - theta/2)
+  # dy = math.cos(boat.heading - theta/2)
+  # dx_temp = dl*math.sin(math.pi/2 - theta)
+  # dy_temp = -dl*math.cos(math.pi/2 - theta)
+  # dx = math.cos(theta)*dx_temp - math.sin(theta)*dy_temp
+  # dy = math.sin(theta)*dx_temp + math.cos(theta)*dy_temp
 
   # calculate the new state
-  new_heading = theta + boat.heading
+  new_heading = theta - boat.heading
   new_position = boat.position[0] + dx, boat.position[1] + dy
 
   return new_heading, new_position
@@ -107,10 +113,10 @@ def danger(my_boat_pos, enemy_boat_pos, buoy_list):
 
 if __name__ == "__main__":
   myBoat = Boat('beth', 'L')
-  myBoat.speed = .4
+  myBoat.speed = 15
   myBoat.position = (300.5,300.5)
-  myBoat.heading = 0
-  print look_ahead(myBoat,.1,1)
+  myBoat.heading = math.pi
+  print look_ahead(myBoat,.09,1)
 
   # buoys = []
   # for i,pos in enumerate([(229, 295), (220, 778), (629, 860), (827, 405)]):
