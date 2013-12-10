@@ -102,7 +102,7 @@ def danger(my_boat_pos, enemy_boat_pos, buoy_list):
   cloud_danger = (1-np.tanh((my_boat_pos[0]-200)/50))/2
 
   # find the real danger
-  return max(1.3*enemy_danger, .8*buoy_danger, pool_danger, cloud_danger)
+  return max(1.3*enemy_danger, .8*buoy_danger, pool_danger, cloud_dangere 
 
 
 if __name__ == "__main__":
